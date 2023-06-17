@@ -27,9 +27,9 @@ const App = () => {
 
   return (
     <div className="flex-center">
-      <h1>Random Chess</h1>
+      <h1>Mini Chess Game</h1>
       <Chessboard
-        width={400}
+        width={700}
         position={fen}
         onDrop={(move) =>
           handleMove({
