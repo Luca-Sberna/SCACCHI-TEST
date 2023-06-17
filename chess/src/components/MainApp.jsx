@@ -5,6 +5,8 @@ import { ChessInstance, ShortMove } from "chess.js";
 
 const Chess = require("chess.js").Chess;
 
+//da aggiungere eccezzioni varie
+
 const App = () => {
   const [chess, setChess] = useState(
     new Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
