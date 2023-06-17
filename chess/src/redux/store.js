@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import chessboardReducer from './path/to/chessboardSlice';
+import chessboardReducer from '../redux/ChessboardSlice';
 
 const store = configureStore({
     reducer: {

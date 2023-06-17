@@ -5,7 +5,7 @@ import {
   otherAction,
   selectPiece,
   selectAvailableMoves,
-} from "../store/chessboardSlice";
+} from "../redux/ChessboardSlice";
 
 const ChessGame = () => {
   const selectedPiece = useSelector((state) => state.chessboard.selectedPiece);

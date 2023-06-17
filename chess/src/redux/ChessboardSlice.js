@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { isKingInCheck, canMove, findKingPosition, isCheckmate } from './chessUtils';
+import { canMovePawn, canMoveRook, canMoveKnight, canMoveBishop, canMoveQueen, canMoveKing, isKingInCheck, isCheckmate, canMove } from '../utils/chessUtils';
 
 const chessboardSlice = createSlice({
     name: 'chessboard',
@@ -79,5 +79,10 @@ const chessboardSlice = createSlice({
 
 
 
-export const { selectSquare, movePiece } = chessboardSlice.actions;
+export const {
+    movePiece,
+    otherAction,
+    selectPiece,
+    selectAvailableMoves,
+} = chessboardSlice.actions;
 export default chessboardSlice.reducer;

@@ -53,30 +53,30 @@ export const isCheckmate = (state, player) => {
     return true; // Nessuna mossa sicura disponibile, scacco matto
 };
 // Funzione ausiliaria per determinare se una pedina può effettuare una mossa valida
-const canMove = (piece, fromPosition, toPosition, pieces) => {
+export const canMove = (piece, fromPosition, toPosition, pieces) => {
     const currentPlayer = pieces[fromPosition].player;
 
     // Implementa la logica per verificare la validità della mossa per la pedina specifica
     // Utilizza le funzioni canMovePawn, canMoveRook, canMoveKnight, canMoveBishop, canMoveQueen, canMoveKing, ecc.
 
     if (piece === 'pawn') {
-        return canMovePawn(fromPosition, toPosition, pieces);
+        return canMovePawn(fromPosition, toPosition, pieces, currentPlayer);
     } else if (piece === 'rook') {
-        return canMoveRook(fromPosition, toPosition, pieces);
+        return canMoveRook(fromPosition, toPosition, pieces, currentPlayer);
     } else if (piece === 'knight') {
-        return canMoveKnight(fromPosition, toPosition, pieces);
+        return canMoveKnight(fromPosition, toPosition, pieces, currentPlayer);
     } else if (piece === 'bishop') {
-        return canMoveBishop(fromPosition, toPosition, pieces);
+        return canMoveBishop(fromPosition, toPosition, pieces, currentPlayer);
     } else if (piece === 'queen') {
-        return canMoveQueen(fromPosition, toPosition, pieces);
+        return canMoveQueen(fromPosition, toPosition, pieces, currentPlayer);
     } else if (piece === 'king') {
-        return canMoveKing(fromPosition, toPosition, pieces);
+        return canMoveKing(fromPosition, toPosition, pieces, currentPlayer);
     }
 
     return false;
 };
 
-const canMoveRook = (fromPosition, toPosition, board, currentPlayer) => {
+export const canMoveRook = (fromPosition, toPosition, board, currentPlayer) => {
     const [fromX, fromY] = fromPosition;
     const [toX, toY] = toPosition;
 
@@ -94,7 +94,7 @@ const canMoveRook = (fromPosition, toPosition, board, currentPlayer) => {
 };
 
 
-const canMoveBishop = (fromPosition, toPosition, board, currentPlayer) => {
+export const canMoveBishop = (fromPosition, toPosition, board, currentPlayer) => {
     const [fromX, fromY] = fromPosition;
     const [toX, toY] = toPosition;
 
@@ -113,7 +113,7 @@ const canMoveBishop = (fromPosition, toPosition, board, currentPlayer) => {
     return false;
 };
 
-const canMoveQueen = (fromPosition, toPosition, board, currentPlayer) => {
+export const canMoveQueen = (fromPosition, toPosition, board, currentPlayer) => {
     if (canMoveRook(fromPosition, toPosition, board) || canMoveBishop(fromPosition, toPosition, board)) {
         const pieceAtDestination = board[toPosition[0]][toPosition[1]];
         if (!pieceAtDestination || pieceAtDestination.player !== currentPlayer) {
@@ -123,7 +123,7 @@ const canMoveQueen = (fromPosition, toPosition, board, currentPlayer) => {
     return false;
 };
 
-const canMoveKing = (fromPosition, toPosition, board, currentPlayer) => {
+export const canMoveKing = (fromPosition, toPosition, board, currentPlayer) => {
     const [fromX, fromY] = fromPosition;
     const [toX, toY] = toPosition;
 
@@ -139,7 +139,7 @@ const canMoveKing = (fromPosition, toPosition, board, currentPlayer) => {
     return false;
 };
 
-const canMovePawn = (fromPosition, toPosition, board, currentPlayer) => {
+export const canMovePawn = (fromPosition, toPosition, board, currentPlayer) => {
     const [fromX, fromY] = fromPosition;
     const [toX, toY] = toPosition;
 
@@ -155,7 +155,7 @@ const canMovePawn = (fromPosition, toPosition, board, currentPlayer) => {
     return false;
 };
 
-const canMoveKnight = (fromPosition, toPosition, board, currentPlayer) => {
+export const canMoveKnight = (fromPosition, toPosition, board, currentPlayer) => {
     const [fromX, fromY] = fromPosition;
     const [toX, toY] = toPosition;
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSquare, movePiece } from "./redux/chessboardSlice";
+import { selectSquare, movePiece } from "../redux/ChessboardSlice";
 
 const Chessboard = () => {
   const chessboardState = useSelector((state) => state.chessboard);
