@@ -8,13 +8,18 @@ const chessboardSlice = createSlice({
         pieces: {
             // Stato iniziale delle pedine sulla scacchiera
         },
+
         currentPlayer: 'bianco', // Aggiungi la variabile currentPlayer
-        isCheck: false, // Aggiungi la variabile isCheck
+        isCheck: false,
+        isGameOver: false,
+        isGameStarted: false,
     },
 
     reducers: {
         selectSquare: (state, action) => {
             state.selectedSquare = action.payload;
+        }, startGame: (state) => {
+            state.isGameStarted = true;
         },
         movePiece: (state, action) => {
             const { fromPosition, toPosition } = action.payload;

@@ -1,32 +1,54 @@
-import React from "react";
-import Square from "./Square";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { selectSquare, movePiece } from "./redux/chessboardSlice";
 
 const Chessboard = () => {
-  const renderSquare = (position) => {
-    return <Square key={position} position={position} />;
-  };
+  const chessboardState = useSelector((state) => state.chessboard);
+  const dispatch = useDispatch();
 
-  const renderRow = (start) => {
-    const row = [];
-    for (let i = start; i < start + 8; i++) {
-      row.push(renderSquare(i));
-    }
-    return row;
-  };
+  const handleSquareClick = (position) => {
+    const { selectedSquare } = chessboardState;
 
-  const renderBoard = () => {
-    const board = [];
-    for (let i = 0; i < 8; i++) {
-      board.push(
-        <div className="board-row" key={i}>
-          {renderRow(i * 8)}
-        </div>,
+    if (selectedSquare === null) {
+      // Seleziona la pedina
+      dispatch(selectSquare(position));
+    } else {
+      // Effettua la mossa
+      dispatch(
+        movePiece({ fromPosition: selectedSquare, toPosition: position }),
       );
     }
-    return board;
   };
 
-  return <div className="chessboard">{renderBoard()}</div>;
+  const renderChessboard = () => {
+    const { pieces } = chessboardState;
+    const squares = [];
+
+    for (let row = 8; row >= 1; row--) {
+      for (let col = 1; col <= 8; col++) {
+        const position = `${String.fromCharCode(96 + col)}${row}`;
+        const piece = pieces[position];
+
+        squares.push(
+          <div
+            key={position}
+            className={`square ${isSquareSelected(position) ? "selected" : ""}`}
+            onClick={() => handleSquareClick(position)}
+          >
+            {piece && <img src={piece.image} alt={piece.type} />}
+          </div>,
+        );
+      }
+    }
+
+    return squares;
+  };
+
+  const isSquareSelected = (position) => {
+    return position === chessboardState.selectedSquare;
+  };
+
+  return <div className="chessboard">{renderChessboard()}</div>;
 };
 
 export default Chessboard;
