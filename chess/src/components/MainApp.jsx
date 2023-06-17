@@ -5,7 +5,11 @@ import { ChessInstance, ShortMove } from "chess.js";
 
 const Chess = require("chess.js").Chess;
 
-//da aggiungere eccezzioni varie
+//da aggiungere controllo eccezzioni per :
+//tornare al proprio posto(nel punto dov'era la pedina selezionata) senza generare errori
+//indicare le mosse sbagliate gestendo l errore con un alert e la ripetizione della mossa
+//impossibilitare l utente a grabbare o interagire con le pedine avversarie (le nere del bot)
+//tempo ,risultato,login,classifica ,
 
 const App = () => {
   const [chess, setChess] = useState(
