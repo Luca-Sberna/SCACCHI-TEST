@@ -1,172 +1,129 @@
-// Funzione per verificare se il re di un giocatore è sotto scacco
-export const isKingInCheck = (state, player) => {
-    const kingPosition = findKingPosition(state, player);
-    const opponentPieces = Object.values(state.pieces).filter((piece) => piece.player !== player);
 
-    for (const piece of opponentPieces) {
-        const piecePosition = Object.entries(state.pieces).find(([position, p]) => p === piece)[0];
-        if (canMove(piece, piecePosition, kingPosition, state.pieces)) {
-            return true;
+export function getKingPosition(board, color) {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const piece = board[row][col];
+            if (piece !== null && piece.type === "king" && piece.color === color) {
+                return { row, col };
+            }
+        }
+    }
+    return null;
+}
+
+export function getAllOpponentMoves(board, color) {
+    const opponentColor = color === "white" ? "black" : "white";
+    let moves = [];
+
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const piece = board[row][col];
+            if (piece !== null && piece.color === opponentColor) {
+                const pieceMoves = getPieceMoves(board, { row, col });
+                moves = moves.concat(pieceMoves);
+            }
         }
     }
 
-    return false;
-};
+    return moves;
+}
 
-// Funzione per trovare la posizione del re di un giocatore
-export const findKingPosition = (state, player) => {
-    const king = Object.values(state.pieces).find((piece) => piece.type === 'king' && piece.player === player);
-    return king ? Object.entries(state.pieces).find(([position, p]) => p === king)[0] : null;
-};
+export function getKingMoves(board, position) {
+    const moves = [];
+    const { row, col } = position;
 
-// Funzione per verificare se il re di un giocatore è sotto scacco matto
-export const isCheckmate = (state, player) => {
-    const kingPosition = findKingPosition(state, player);
-    const king = state.pieces[kingPosition];
-    const opponentPieces = Object.values(state.pieces).filter((piece) => piece.player !== player);
+    for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+            const newRow = row + i;
+            const newCol = col + j;
 
-    // Prova tutte le possibili mosse del re
-    for (let dx = -1; dx <= 1; dx++) {
-        for (let dy = -1; dy <= 1; dy++) {
-            if (dx !== 0 || dy !== 0) {
-                const targetPosition = [kingPosition[0] + dx, kingPosition[1] + dy];
-                if (canMove(king, kingPosition, targetPosition, state.pieces) && !isKingInCheck(state, player)) {
-                    return false; // Il re può muoversi in una posizione sicura
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                const piece = board[newRow][newCol];
+                if (piece === null || piece.color !== board[row][col].color) {
+                    moves.push({ from: position, to: { row: newRow, col: newCol } });
                 }
             }
         }
     }
 
-    // Prova tutte le possibili mosse delle altre pedine avversarie
-    for (const piece of opponentPieces) {
-        const piecePosition = Object.entries(state.pieces).find(([position, p]) => p === piece)[0];
-        for (let rank = 0; rank < 8; rank++) {
-            for (let file = 0; file < 8; file++) {
-                const targetPosition = [rank, file];
-                if (canMove(piece, piecePosition, targetPosition, state.pieces) && !isKingInCheck(state, player)) {
-                    return false; // C'è almeno una mossa sicura disponibile
-                }
+    return moves;
+}
+
+export function makeMove(board, move) {
+    const { from, to } = move;
+    const piece = board[from.row][from.col];
+
+    board[to.row][to.col] = piece;
+    board[from.row][from.col] = null;
+
+    return board;
+}
+
+export function undoMove(board, move) {
+    const { from, to } = move;
+    const piece = board[to.row][to.col];
+
+    board[from.row][from.col] = piece;
+    board[to.row][to.col] = null;
+
+    return board;
+}
+
+function getPieceMoves(board, position) {
+    // Implementa la logica per ottenere i possibili movimenti di una specifica pedina
+    // Questa funzione dovrebbe gestire i movimenti di tutti i tipi di pezzi (re, regina, torre, alfiere, cavallo, pedone)
+}
+
+
+
+
+// Funzione per verificare se il re è in scacco
+export function isCheck() {
+    // Ottieni la posizione del re
+    const kingPosition = getKingPosition(); // Funzione da implementare
+
+    // Ottieni tutte le possibili mosse dell'avversario
+    const opponentMoves = getAllOpponentMoves(); // Funzione da implementare
+
+    // Verifica se una delle mosse dell'avversario minaccia la posizione del re
+    for (let move of opponentMoves) {
+        if (move.to === kingPosition) {
+            // Il re è in scacco
+            return true;
+        }
+    }
+
+    // Il re non è in scacco
+    return false;
+}
+// Funzione per verificare se il re è in scacco matto
+export function isCheckmate() {
+    // Verifica se il re è in scacco
+    if (isCheck()) {
+        // Ottieni tutte le possibili mosse del re
+        const kingMoves = getKingMoves(); // Funzione da implementare
+
+        // Verifica se il re può spostarsi in una posizione sicura
+        for (let move of kingMoves) {
+            // Simula la mossa del re
+            makeMove(move); // Funzione da implementare
+
+            // Verifica se il re è ancora in scacco dopo la mossa
+            if (!isCheck()) {
+                // Il re ha una mossa sicura disponibile, quindi non è scacco matto
+                undoMove(); // Annulla la mossa simulata
+                return false;
             }
+
+            // Annulla la mossa simulata per testare le altre possibili mosse
+            undoMove();
         }
+
+        // Se il re non può spostarsi in una posizione sicura, allora è scacco matto
+        return true;
     }
 
-    return true; // Nessuna mossa sicura disponibile, scacco matto
-};
-// Funzione ausiliaria per determinare se una pedina può effettuare una mossa valida
-export const canMove = (piece, fromPosition, toPosition, pieces) => {
-    const currentPlayer = pieces[fromPosition].player;
-
-    // Implementa la logica per verificare la validità della mossa per la pedina specifica
-    // Utilizza le funzioni canMovePawn, canMoveRook, canMoveKnight, canMoveBishop, canMoveQueen, canMoveKing, ecc.
-
-    if (piece === 'pawn') {
-        return canMovePawn(fromPosition, toPosition, pieces, currentPlayer);
-    } else if (piece === 'rook') {
-        return canMoveRook(fromPosition, toPosition, pieces, currentPlayer);
-    } else if (piece === 'knight') {
-        return canMoveKnight(fromPosition, toPosition, pieces, currentPlayer);
-    } else if (piece === 'bishop') {
-        return canMoveBishop(fromPosition, toPosition, pieces, currentPlayer);
-    } else if (piece === 'queen') {
-        return canMoveQueen(fromPosition, toPosition, pieces, currentPlayer);
-    } else if (piece === 'king') {
-        return canMoveKing(fromPosition, toPosition, pieces, currentPlayer);
-    }
-
+    // Se il re non è in scacco, non può essere scacco matto
     return false;
-};
+}
 
-export const canMoveRook = (fromPosition, toPosition, board, currentPlayer) => {
-    const [fromX, fromY] = fromPosition;
-    const [toX, toY] = toPosition;
-
-    if (fromX === toX || fromY === toY) {
-        // Verifica che non ci siano pedine nel percorso orizzontale o verticale
-        // Implementa la logica per controllare le pedine tra le due posizioni
-
-        const pieceAtDestination = board[toX][toY];
-        if (!pieceAtDestination || pieceAtDestination.player !== currentPlayer) {
-            return true;
-        }
-    }
-    return false;
-
-};
-
-
-export const canMoveBishop = (fromPosition, toPosition, board, currentPlayer) => {
-    const [fromX, fromY] = fromPosition;
-    const [toX, toY] = toPosition;
-
-    const dx = Math.abs(fromX - toX);
-    const dy = Math.abs(fromY - toY);
-
-    if (dx === dy) {
-        // Verifica che non ci siano pedine nel percorso diagonale
-        // Implementa la logica per controllare le pedine tra le due posizioni
-
-        const pieceAtDestination = board[toX][toY];
-        if (!pieceAtDestination || pieceAtDestination.player !== currentPlayer) {
-            return true;
-        }
-    }
-    return false;
-};
-
-export const canMoveQueen = (fromPosition, toPosition, board, currentPlayer) => {
-    if (canMoveRook(fromPosition, toPosition, board) || canMoveBishop(fromPosition, toPosition, board)) {
-        const pieceAtDestination = board[toPosition[0]][toPosition[1]];
-        if (!pieceAtDestination || pieceAtDestination.player !== currentPlayer) {
-            return true;
-        }
-    }
-    return false;
-};
-
-export const canMoveKing = (fromPosition, toPosition, board, currentPlayer) => {
-    const [fromX, fromY] = fromPosition;
-    const [toX, toY] = toPosition;
-
-    const dx = Math.abs(fromX - toX);
-    const dy = Math.abs(fromY - toY);
-
-    if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1) || (dx === 1 && dy === 1)) {
-        const pieceAtDestination = board[toX][toY];
-        if (!pieceAtDestination || pieceAtDestination.player !== currentPlayer) {
-            return true;
-        }
-    }
-    return false;
-};
-
-export const canMovePawn = (fromPosition, toPosition, board, currentPlayer) => {
-    const [fromX, fromY] = fromPosition;
-    const [toX, toY] = toPosition;
-
-    const dx = toX - fromX;
-    const dy = toY - fromY;
-
-    if (dx === 1 && dy === 0) {
-        const pieceAtDestination = board[toX][toY];
-        if (!pieceAtDestination || pieceAtDestination.player !== currentPlayer) {
-            return true;
-        }
-    }
-    return false;
-};
-
-export const canMoveKnight = (fromPosition, toPosition, board, currentPlayer) => {
-    const [fromX, fromY] = fromPosition;
-    const [toX, toY] = toPosition;
-
-    const dx = Math.abs(fromX - toX);
-    const dy = Math.abs(fromY - toY);
-
-    if ((dx === 2 && dy === 1) || (dx === 1 && dy === 2)) {
-        const pieceAtDestination = board[toX][toY];
-        if (!pieceAtDestination || pieceAtDestination.player !== currentPlayer) {
-            return true;
-        }
-    }
-    return false;
-};

@@ -1,0 +1,56 @@
+// scss-docs-start import-stack
+// Configuration
+//@import "/chess/node_modules/node_modules/bootstrap/scss/functions";
+// Include any default variable overrides here
+
+@import "variables"; /* gli override delle variabili bs ,per customizzare */
+
+//@import "/chess/node_modules/bootstrap/scss/variables";
+
+@import "maps"; /* gli override delle maps bs ,per customizzare */
+
+//Include any default map overrides here
+
+//@import "/chess/node_modules/bootstrap/scss/maps";
+
+//@import "/chess/node_modules/bootstrap/scss/mixins";
+//@import "/chess/node_modules/bootstrap/scss/utilities";
+
+// Layout & components
+//@import "/chess/node_modules/bootstrap/scss/reboot";
+//@import "/chess/node_modules/bootstrap/scss/type";
+//@import "/chess/node_modules/bootstrap/scss/images";
+//@import "/chess/node_modules/bootstrap/scss/containers";
+//@import "/chess/node_modules/bootstrap/scss/grid";
+//@import "tables";
+//@import "/chess/node_modules/bootstrap/scss/forms";
+//@import "/chess/node_modules/bootstrap/scss/buttons";
+//@import "/chess/node_modules/bootstrap/scss/transitions";
+//@import "/chess/node_modules/bootstrap/scss/dropdown";
+//@import "button-group";
+//@import "/chess/node_modules/bootstrap/scss/nav";
+//@import "/chess/node_modules/bootstrap/scss/navbar";
+//@import "/chess/node_modules/bootstrap/scss/card";
+//@import "accordion";
+//@import "breadcrumb";
+//@import "pagination";
+//@import "badge";
+//@import "alert";
+//@import "progress";
+//@import "list-group";
+//@import "close";
+//@import "toasts";
+//@import "modal";
+//@import "tooltip";
+//@import "popover";
+//@import "/chess/node_modules/bootstrap/scss/carousel";
+//@import "/chess/node_modules/bootstrap/scss/spinners";
+//@import "offcanvas";
+//@import "placeholders";
+
+// Helpers
+//@import "/chess/node_modules/bootstrap/scss/helpers";
+
+// Utilities
+//@import "/chess/node_modules/bootstrap/scss/utilities/api";
+// scss-docs-end import-stack
