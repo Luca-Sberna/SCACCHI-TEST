@@ -9,7 +9,10 @@ const Chess = require("chess.js").Chess;
 //tornare al proprio posto(nel punto dov'era la pedina selezionata) senza generare errori
 //indicare le mosse sbagliate gestendo l errore con un alert e la ripetizione della mossa
 //impossibilitare l utente a grabbare o interagire con le pedine avversarie (le nere del bot)
-//tempo ,risultato,login,classifica ,
+//da aggiungere features :
+//tempo della partita e tempo massimo per muovere la pedina
+//risultato = username & tempo partita & vittoria/sconfitta & in quante mosse
+//classifica
 
 const App = () => {
   const [chess, setChess] = useState(
